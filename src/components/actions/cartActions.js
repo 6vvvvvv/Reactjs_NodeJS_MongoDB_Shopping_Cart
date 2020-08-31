@@ -4,52 +4,69 @@ import {
   SUB_QUANTITY,
   ADD_QUANTITY,
   ADD_SHIPPING,
-  SUB_SHIPPING
+  SUB_SHIPPING,
+  SET_LOGSTATUS,
+  SET_LOGGEDINUSERNAME,
 } from "./action-types/cart-actions";
 
 //Add cart action
-export const addToCart = id => {
+export const addToCart = (id) => {
   return {
     type: ADD_TO_CART,
-    id
+    id,
   };
 };
 //Remove item action
-export const removeItem = id => {
+export const removeItem = (id) => {
   return {
     type: REMOVE_ITEM,
-    id
+    id,
   };
 };
 
 //Add quantity action
-export const addQuantity = id => {
+export const addQuantity = (id) => {
   return {
     type: ADD_QUANTITY,
-    id
+    id,
   };
 };
 
 //Subtract quantity action
-export const subtractQuantity = id => {
+export const subtractQuantity = (id) => {
   return {
     type: SUB_QUANTITY,
-    id
+    id,
   };
 };
 
 //Add shipment action
-export const addShipping = id => {
+export const addShipping = (id) => {
   return {
     type: ADD_SHIPPING,
-    id
+    id,
   };
 };
 
 //Subtract shipment action
-export const substractShipping = id => {
+export const substractShipping = (id) => {
   return {
     type: SUB_SHIPPING,
-    id
+    id,
+  };
+};
+
+
+export const setStatus = (payload) => {
+  return {
+    type: SET_LOGSTATUS,
+    payload,
+  };
+};
+
+export const setLoginUserName = (payload) => {
+  return {
+    type: SET_LOGGEDINUSERNAME,
+    payload,
   };
 };

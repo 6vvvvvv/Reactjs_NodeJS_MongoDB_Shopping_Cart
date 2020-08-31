@@ -1,0 +1,21 @@
+.signup {
+  margin: 80px auto;
+  height: 440px;
+  width: 350px;
+}
+
+div p {
+  font-size: x-small;
+}
+
+.redirect:hover {
+  color: pink;
+}
+
+.login_descrip {
+  text-align: center;
+}
+
+.signup-btn {
+  margin: 0 100px;
+}

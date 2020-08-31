@@ -6,7 +6,7 @@ class Recipe extends Component {
     if (this.refs.shipping.checked) this.props.substractShipping();
   }
 
-  handleChecked = e => {
+  handleChecked = (e) => {
     if (e.target.checked) {
       this.props.addShipping();
     } else {
@@ -40,21 +40,21 @@ class Recipe extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     addedItems: state.addedItems,
-    total: state.total
+    total: state.total,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     addShipping: () => {
       dispatch({ type: "ADD_SHIPPING" });
     },
     substractShipping: () => {
       dispatch({ type: "SUB_SHIPPING" });
-    }
+    },
   };
 };
 

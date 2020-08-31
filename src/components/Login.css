@@ -1,0 +1,21 @@
+.login {
+    margin: 80px auto;
+    height:340px;
+    width: 350px;
+}
+div p {
+  font-size: x-small;
+}
+
+.redirect:hover {
+  color: pink;
+}
+
+
+.register_descrip{
+  text-align: center;
+ }
+
+.signin-btn{
+ margin:0 100px
+}

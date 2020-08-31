@@ -1,30 +1,61 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   removeItem,
   addQuantity,
-  subtractQuantity
+  subtractQuantity,
 } from "./actions/cartActions";
 import Recipe from "./Recipe";
+import "./Cart.css";
+import axios from "axios";
 
+const Cart = (props) => {
+  const [user, setUser] = useState("");
 
-class Cart extends Component {
+  useEffect(() => {
+    if (!localStorage.length) {
+      return props.history.push("/login");
+    }
+
+    var userinfo = JSON.parse(localStorage.getItem("user"));
+    console.log("user", userinfo);
+
+    axios
+      .get("http://localhost:4000/user/me", {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `${userinfo}`,
+        },
+      })
+      .then((res) => {
+        if (res.data.user) {
+          setUser(res.data.user);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        return props.history.push("/login");
+      });
+  }, [props.history]);
+
   //Remove the item
-  handleRemove = id => {
-    this.props.removeItem(id);
+  const handleRemove = (id) => {
+    props.removeItem(id);
   };
   //Add the quantity
-  handleAddQuantity = id => {
-    this.props.addQuantity(id);
+  const handleAddQuantity = (id) => {
+    props.addQuantity(id);
   };
   //Substruct the quantity
-  handleSubtractQuantity = id => {
-    this.props.subtractQuantity(id);
+  const handleSubtractQuantity = (id) => {
+    props.subtractQuantity(id);
   };
-  render() {
-    let addedItems = this.props.items.length ? (
-      this.props.items.map(item => {
+
+  let addedItems =
+    props.items.length && user ? (
+      props.items.map((item) => {
         return (
           <li className="collection-item avatar" key={item.id}>
             <div className="item-img">
@@ -45,7 +76,7 @@ class Cart extends Component {
                   <i
                     className="material-icons"
                     onClick={() => {
-                      this.handleAddQuantity(item.id);
+                      handleAddQuantity(item.id);
                     }}
                   >
                     arrow_drop_up
@@ -55,7 +86,7 @@ class Cart extends Component {
                   <i
                     className="material-icons"
                     onClick={() => {
-                      this.handleSubtractQuantity(item.id);
+                      handleSubtractQuantity(item.id);
                     }}
                   >
                     arrow_drop_down
@@ -65,7 +96,7 @@ class Cart extends Component {
               <button
                 className="waves-effect waves-light btn pink remove"
                 onClick={() => {
-                  this.handleRemove(item.id);
+                  handleRemove(item.id);
                 }}
               >
                 Remove
@@ -77,34 +108,34 @@ class Cart extends Component {
     ) : (
       <p>Nothing.</p>
     );
-    return (
-      <div className="container">
-        <div className="cart">
-          <h5>You have ordered:</h5>
-          <ul className="collection">{addedItems}</ul>
-        </div>
-        <Recipe />
+  return (
+    <div className="container">
+      <div className="cart">
+        <h5>You have ordered:</h5>
+        <ul className="collection">{addedItems}</ul>
       </div>
-    );
-  }
-}
+      <Recipe />
+    </div>
+  );
+};
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    items: state.addedItems
+    items: state.addedItems,
   };
 };
-const mapDispatchToProps = dispatch => {
+
+const mapDispatchToProps = (dispatch) => {
   return {
-    removeItem: id => {
+    removeItem: (id) => {
       dispatch(removeItem(id));
     },
-    addQuantity: id => {
+    addQuantity: (id) => {
       dispatch(addQuantity(id));
     },
-    subtractQuantity: id => {
+    subtractQuantity: (id) => {
       dispatch(subtractQuantity(id));
-    }
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

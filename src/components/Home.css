@@ -1,0 +1,12 @@
+.material-icons {
+  font-size: 2.4em;
+  cursor: pointer;
+}
+.card-display {
+  width: 300px;
+  margin-left: 5px;
+}
+.card .card-image .card-title {
+  color: black;
+  font-weight: 400;
+}

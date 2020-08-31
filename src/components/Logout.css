@@ -1,0 +1,22 @@
+.logout {
+    margin: 200px auto;
+    height:200px;
+    width: 350px;
+}
+div p {
+  font-size: x-small;
+}
+
+.redirect:hover {
+  color: pink;
+}
+
+
+.return-home{
+  text-align: center;
+  font-size: 20px;
+ }
+
+.logout-btn{
+    margin-left: 40px;
+}

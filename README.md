@@ -1,13 +1,10 @@
-# Reactjs_Redux_Router_Shopping_Cart
+# Reactjs_Redux_Router_Node_MongoDB_Shopping_Cart
 
-## Try it yourself
-https://shopping-cart-lw-926e2.firebaseapp.com/
-
-## Homepage
-![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Shopping_Cart/blob/master/imgs/overall.jpg)
+## 1.Homepage
+![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Shopping_Cart/blob/master/imgs/1.jpg)
 
 ## Cart Without Order
-![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Shopping_Cart/blob/master/imgs/shopping%20cart%20initial%20status.jpg)
+![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Shopping_Cart/blob/master/imgs/2.jpg)
 
 ## Cart with Order
 ![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Shopping_Cart/blob/master/imgs/order%20view.jpg)

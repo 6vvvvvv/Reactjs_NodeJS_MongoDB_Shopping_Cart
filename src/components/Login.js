@@ -49,60 +49,74 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="card login">
-        <div className="card-content">
-          <div className="row">
-            <form className="col s12">
-              <div className="row">
-                <div className="input-field col s12">
-                  <input
-                    id="email"
-                    type="email"
-                    className="validate"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChangeHandler}
-                  />
-                  <label htmlFor="email">Email</label>
+      <div className="container">
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <div className="row">
+          <div className="col s4"></div>
+          <div className="col s3">
+            <div className="card login ">
+              <div className="card-content">
+                <div className="row">
+                  <form className="col s12">
+                    <div className="row">
+                      <div className="input-field col s12">
+                        <input
+                          id="email"
+                          type="email"
+                          className="validate"
+                          name="email"
+                          value={this.state.email}
+                          onChange={this.onChangeHandler}
+                        />
+                        <label htmlFor="email">Email</label>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="input-field col s12">
+                        <input
+                          id="password"
+                          type="password"
+                          className="validate"
+                          name="password"
+                          value={this.state.password}
+                          onChange={this.onChangeHandler}
+                        />
+                        <label htmlFor="password">Password</label>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <p className="register_descrip">
+                        Not registered?{" "}
+                        <span>
+                          <Link to="/register" className="redirect">
+                            Create an account
+                          </Link>
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="row">
+                      <button
+                        className="btn waves-effect waves-light pink signin-btn "
+                        name="action"
+                        onClick={this.signInWithEmailAndPasswordHandler}
+                      >
+                        Signin
+                        <i className="material-icons right">send</i>
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
-
-              <div className="row">
-                <div className="input-field col s12">
-                  <input
-                    id="password"
-                    type="password"
-                    className="validate"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChangeHandler}
-                  />
-                  <label htmlFor="password">Password</label>
-                </div>
-              </div>
-
-              <div className="row">
-                <p className="register_descrip">
-                  Not registered?{" "}
-                  <span>
-                    <Link to="/register" className="redirect">
-                      Create an account
-                    </Link>
-                  </span>
-                </p>
-              </div>
-
-              <div className="row">
-                <button
-                  className="btn waves-effect waves-light pink signin-btn "
-                  name="action"
-                  onClick={this.signInWithEmailAndPasswordHandler}
-                >
-                  Signin
-                  <i className="material-icons right">send</i>
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>

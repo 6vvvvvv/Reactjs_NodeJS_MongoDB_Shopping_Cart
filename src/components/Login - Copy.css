@@ -1,5 +1,5 @@
-.signup {
-  height: 440px;
+.login {
+  height: 340px;
   width: 350px;
 }
 
@@ -11,10 +11,10 @@ div p {
   color: pink;
 }
 
-.login_descrip {
+.register_descrip {
   text-align: center;
 }
 
-.signup-btn {
+.signin-btn {
   margin: 0 100px;
 }

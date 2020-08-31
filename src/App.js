@@ -6,6 +6,7 @@ import Cart from "./components/Cart";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Logout from "./components/Logout";
+import "materialize-css/dist/css/materialize.min.css";
 
 class App extends Component {
   render() {

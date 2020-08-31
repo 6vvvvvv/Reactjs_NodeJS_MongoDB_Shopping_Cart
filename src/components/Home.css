@@ -10,3 +10,13 @@
   color: black;
   font-weight: 400;
 }
+
+.sidenav-headtext{
+  margin: 0;
+  font-size:20px;
+  margin-left:10px
+} 
+
+.sidebar-nav{
+  margin: 0;
+}

@@ -40,7 +40,7 @@ class Home extends Component {
         <div className="card card-display" key={item.id}>
           <div className="card-image">
             <img src={item.img} alt={item.title} />
-            <span className="card-title">{item.title}</span>
+            
             <span
               to="/"
               className="btn-floating halfway-fab waves-effect waves-light red"
@@ -52,6 +52,7 @@ class Home extends Component {
             </span>
           </div>
           <div className="card-content">
+          <span className=" itemname">{item.title}</span>
             <p>{item.desc}</p>
             <p>
               <b>Price: {item.price}$</b>

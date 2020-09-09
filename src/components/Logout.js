@@ -8,6 +8,7 @@ class Logout extends Component {
     e.preventDefault();
     localStorage.removeItem(`user`);
     this.props.history.push("/");
+    window.location.reload();
   };
   render() {
     return (

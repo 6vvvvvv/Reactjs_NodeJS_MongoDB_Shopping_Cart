@@ -1,4 +1,4 @@
-# Reactjs_Redux_Router_Node_MongoDB_Shopping_Cart
+# Reactjs_NodeJS_MongoDB_Shopping_Cart
 
 ## 1.Homepage
 ![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Node_MongoDB_Shopping_Cart/blob/master/imgs/1.jpg)

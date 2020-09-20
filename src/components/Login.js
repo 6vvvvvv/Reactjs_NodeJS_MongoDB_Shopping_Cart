@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
 import { setStatus, setLoginUserName } from "./actions/cartActions";
 import { connect } from "react-redux";
@@ -33,7 +33,7 @@ class Login extends Component {
       .then((response) => {
         console.log("response after login", response.data);
 
-        localStorage.setItem(`user`, JSON.stringify(response.data.token));
+        localStorage.setItem(`user`, JSON.stringify(response.data));
 
         this.props.setStatus(true);
         this.props.setLoginUserName(response.data.username);
@@ -129,4 +129,4 @@ const mapDispatchToProps = (dispatch) => ({
   setLoginUserName: (payload) => dispatch(setLoginUserName(payload)),
 });
 
-export default connect(null, mapDispatchToProps)(Login);
+export default withRouter(connect(null, mapDispatchToProps)(Login));

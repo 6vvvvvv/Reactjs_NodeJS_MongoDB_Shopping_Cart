@@ -100,10 +100,9 @@ router.post(
     }
 
     const { password } = req.body;
-    //FIXME:
     var { email } = req.body;
     email = email.toLowerCase();
-    
+
     try {
       let user = await User.findOne({
         email,
@@ -135,7 +134,7 @@ router.post(
           if (err) throw err;
           res.status(200).json({
             token,
-            username:user.username
+            useremail: user.email,
           });
         }
       );
@@ -148,12 +147,6 @@ router.post(
   }
 );
 
-/**
- * @method - POST
- * @description - Get LoggedIn User
- * @param - /user/me
- */
-
 router.get("/me", auth, async (req, res) => {
   try {
     // request.user is getting fetched from Middleware after token authentication
@@ -163,5 +156,226 @@ router.get("/me", auth, async (req, res) => {
     res.send({ message: "Error in Fetching user" });
   }
 });
+
+//add to cart
+router.post("/additem", async (req, res) => {
+  const userinfo = await User.findOne({ email: req.body.email });
+  const findtarget = userinfo.order.find(
+    (item) => item.id === req.body.item.id
+  );
+
+  if (!findtarget) {
+    User.updateOne(
+      { email: req.body.email },
+      {
+        $addToSet: { order: req.body.item },
+      },
+      function () {
+        User.findOne({ email: req.body.email }).exec(function (error, use) {
+          if (error) {
+            throw error;
+          } else {
+            res.json({ sum: use.calsum(), id: req.body.item.id, order: use });
+          }
+        });
+      }
+    );
+  } else {
+    User.updateOne(
+      {
+        email: req.body.email,
+        "order.id": req.body.item.id,
+        "order.quantity": { $gt: 0 },
+      },
+      {
+        $inc: {
+          "order.$.quantity": 1,
+        },
+      },
+      function () {
+        User.findOne({ email: req.body.email }).exec(function (error, use) {
+          if (error) {
+            throw error;
+          } else {
+            res.json({ sum: use.calsum(), id: req.body.item.id, order: use });
+          }
+        });
+      }
+    );
+  }
+});
+
+//remove item
+router.post("/removeitem", async (req, res) => {
+  await User.updateOne(
+    {
+      email: req.body.email,
+    },
+    {
+      $pull: {
+        order: { id: req.body.item.id },
+      },
+    },
+    function (err, data) {
+      if (err) {
+        throw err;
+      } else {
+        res.json({ id: req.body.item.id, order: data });
+      }
+    }
+  );
+});
+
+//add quantity
+router.post("/addquantity", async (req, res) => {
+  const userinfo = await User.findOne({ email: req.body.email });
+  const findtarget = userinfo.order.find(
+    (item) => item.id === req.body.item.id
+  );
+
+  if (findtarget) {
+    User.updateOne(
+      {
+        email: req.body.email,
+        "order.id": req.body.item.id,
+        "order.quantity": { $gt: 0 },
+      },
+      {
+        $inc: {
+          "order.$.quantity": 1,
+        },
+      },
+      function () {
+        User.findOne({ email: req.body.email }).exec(function (error, use) {
+          if (error) {
+            throw error;
+          } else {
+            console.log("sum", use.calsum());
+            res.json({ sum: use.calsum(), id: req.body.item.id, order: use });
+          }
+        });
+      }
+    );
+  }
+});
+
+//sub quantity
+router.post("/subquantity", async (req, res) => {
+  const userinfo = await User.findOne({ email: req.body.email });
+  const findtarget = userinfo.order.find(
+    (item) => item.id === req.body.item.id
+  );
+
+  if (findtarget) {
+    User.updateOne(
+      {
+        email: req.body.email,
+        "order.id": req.body.item.id,
+        "order.quantity": { $gt: 0 },
+      },
+      {
+        $inc: {
+          "order.$.quantity": -1,
+        },
+      },
+      function (err, data) {
+        if (err) {
+          throw err;
+        } else {
+          User.findOne(
+            {
+              email: req.body.email,
+              "order.id": req.body.item.id,
+              "order.quantity": { $eq: 0 },
+            },
+            {
+              $pull: {
+                order: { id: req.body.item.id },
+              },
+            }
+          );
+
+          res.json({ id: req.body.item.id, order: data });
+        }
+      }
+    );
+  }
+});
+
+router.post("/addshipment", async (req, res) => {
+  User.findOne(
+    {
+      email: req.body.email,
+    },
+    function (err, doc) {
+      if (err) {
+        throw err;
+      } else {
+        doc.shipment = true;
+        doc.save();
+      }
+    }
+  );
+
+  await User.findOne({ email: req.body.email }).exec(function (error, use) {
+    if (error) {
+      throw error;
+    } else {
+      res.json({ sum: use.calsum() + 10, id: req.body.item.id, order: use });
+    }
+  });
+});
+
+router.post("/subshipment", async (req, res) => {
+  User.findOne(
+    {
+      email: req.body.email,
+    },
+    function (err, doc) {
+      if (err) {
+        throw err;
+      } else {
+        doc.shipment = false;
+        doc.save();
+      }
+    }
+  );
+
+  await User.findOne({ email: req.body.email }).exec(function (error, use) {
+    if (error) {
+      throw error;
+    } else {
+      res.json({ sum: use.calsum() - 10, id: req.body.item.id, order: use });
+    }
+  });
+});
+
+// router.post("/toggleitem", async (req, res) => {
+//   User.findOne(
+//     {
+//       email: req.body.email,
+//     },
+//     function (err, doc) {
+//       if (err) {
+//         throw err;
+//       } else {
+//         doc.shipment = !doc.shipment;
+//         doc.save();
+//       }
+//     }
+//   );
+
+//   await User.findOne({ email: req.body.email }).exec(function (error, use) {
+//     if (error) {
+//       throw error;
+//     } else {
+//       if (use.shipment) {
+//         res.json({ sum: use.calsum() + 10, id: req.body.item.id });
+//       } else {
+//         res.json({ sum: use.calsum(), id: req.body.item.id });
+//       }
+//     }
+//   });
+// });
 
 module.exports = router;

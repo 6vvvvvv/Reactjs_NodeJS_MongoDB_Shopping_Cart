@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import {
-  removeItem,
-  addQuantity,
-  subtractQuantity,
-} from "./actions/cartActions";
+  remove_item_fromback,
+  add_quantity,
+  sub_quantity,
+} from "../components/thunk/cart-thunk.js";
 import Recipe from "./Recipe";
 import "./Cart.css";
 import axios from "axios";
@@ -26,7 +26,7 @@ const Cart = (props) => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `${userinfo}`,
+          Authorization: `${userinfo.token}`,
         },
       })
       .then((res) => {
@@ -41,20 +41,38 @@ const Cart = (props) => {
   }, [props.history]);
 
   //Remove the item
-  const handleRemove = (id) => {
-    props.removeItem(id);
+  const handleRemove = (item) => {
+    const userinfo = JSON.parse(localStorage.getItem("user"));
+    const useremail = userinfo.useremail;
+    const payload = {
+      item,
+      useremail,
+    };
+    props.remove_item_fromback(payload);
   };
   //Add the quantity
-  const handleAddQuantity = (id) => {
-    props.addQuantity(id);
+  const handleAddQuantity = (item) => {
+    const userinfo = JSON.parse(localStorage.getItem("user"));
+    const useremail = userinfo.useremail;
+    const payload = {
+      item,
+      useremail,
+    };
+    props.add_quantity(payload);
   };
   //Substruct the quantity
-  const handleSubtractQuantity = (id) => {
-    props.subtractQuantity(id);
+  const handleSubtractQuantity = (item) => {
+    const userinfo = JSON.parse(localStorage.getItem("user"));
+    const useremail = userinfo.useremail;
+    const payload = {
+      item,
+      useremail,
+    };
+    props.sub_quantity(payload);
   };
 
   let addedItems =
-    props.items.length && user ? (
+    props.items && user ? (
       props.items.map((item) => {
         return (
           <li className="collection-item avatar" key={item.id}>
@@ -76,7 +94,7 @@ const Cart = (props) => {
                   <i
                     className="material-icons"
                     onClick={() => {
-                      handleAddQuantity(item.id);
+                      handleAddQuantity(item);
                     }}
                   >
                     arrow_drop_up
@@ -86,7 +104,7 @@ const Cart = (props) => {
                   <i
                     className="material-icons"
                     onClick={() => {
-                      handleSubtractQuantity(item.id);
+                      handleSubtractQuantity(item);
                     }}
                   >
                     arrow_drop_down
@@ -96,7 +114,7 @@ const Cart = (props) => {
               <button
                 className="waves-effect waves-light btn pink remove"
                 onClick={() => {
-                  handleRemove(item.id);
+                  handleRemove(item);
                 }}
               >
                 Remove
@@ -127,14 +145,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeItem: (id) => {
-      dispatch(removeItem(id));
+    remove_item_fromback: (payload) => {
+      dispatch(remove_item_fromback(payload));
     },
-    addQuantity: (id) => {
-      dispatch(addQuantity(id));
+    add_quantity: (payload) => {
+      dispatch(add_quantity(payload));
     },
-    subtractQuantity: (id) => {
-      dispatch(subtractQuantity(id));
+    sub_quantity: (payload) => {
+      dispatch(sub_quantity(payload));
     },
   };
 };

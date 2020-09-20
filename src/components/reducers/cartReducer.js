@@ -1,11 +1,3 @@
-import Item1 from "../../images/item1.jpg";
-import Item2 from "../../images/item2.jpg";
-import Item3 from "../../images/item3.jpg";
-import Item4 from "../../images/item4.jpg";
-import Item5 from "../../images/item5.jpg";
-import Item6 from "../../images/item6.jpg";
-import Item7 from "../../images/item7.jpg";
-import Item8 from "../../images/item8.jpg";
 import {
   ADD_TO_CART,
   REMOVE_ITEM,
@@ -16,8 +8,16 @@ import {
   SET_LOGSTATUS,
   SET_LOGGEDINUSERNAME,
 } from "../actions/action-types/cart-actions";
+import Item1 from "../../images/item1.jpg";
+import Item2 from "../../images/item2.jpg";
+import Item3 from "../../images/item3.jpg";
+import Item4 from "../../images/item4.jpg";
+import Item5 from "../../images/item5.jpg";
+import Item6 from "../../images/item6.jpg";
+import Item7 from "../../images/item7.jpg";
+import Item8 from "../../images/item8.jpg";
 
-const initState = {
+export const initState = {
   items: [
     {
       id: 1,
@@ -84,107 +84,56 @@ const initState = {
 
 const cartReducer = (state = initState, action) => {
   //Home Component
-  if (action.type === ADD_TO_CART) {
-    let addedItem = state.items.find((item) => item.id === action.id);
-    //Check if the action id exists in the addedItems
-    let existed_item = state.addedItems.find((item) => action.id === item.id);
-    if (existed_item) {
-      addedItem.quantity += 1;
+  switch (action.type) {
+    case ADD_TO_CART:
       return {
         ...state,
-        total: state.total + addedItem.price,
+        addedItems: action.payload.order.order,
+        total: action.payload.sum,
       };
-    } else {
-      addedItem.quantity = 1;
-      //Calculating the total
-      let newTotal = state.total + addedItem.price;
-
+    case REMOVE_ITEM:
       return {
         ...state,
-        addedItems: [...state.addedItems, addedItem],
-        total: newTotal,
+        addedItems: action.payload.order.order,
+        total: action.payload.sum,
       };
-    }
-  }
-  if (action.type === REMOVE_ITEM) {
-    let itemToRemove = state.addedItems.find((item) => action.id === item.id);
-    let new_items = state.addedItems.filter((item) => action.id !== item.id);
-
-    //Calculating the total
-    let newTotal = state.total - itemToRemove.price * itemToRemove.quantity;
-    console.log(itemToRemove);
-    return {
-      ...state,
-      addedItems: new_items,
-      total: newTotal,
-    };
-  }
-  //Cart Component
-  if (action.type === ADD_QUANTITY) {
-    let addedItem = state.items.find((item) => item.id === action.id);
-    addedItem.quantity += 1;
-    let newTotal = state.total + addedItem.price;
-    return {
-      ...state,
-      total: newTotal,
-    };
-  }
-  if (action.type === SUB_QUANTITY) {
-    let addedItem = state.items.find((item) => item.id === action.id);
-    //If the quantity == 0 then remove
-    if (addedItem.quantity === 1) {
-      let new_items = state.addedItems.filter((item) => item.id !== action.id);
-      let newTotal = state.total - addedItem.price;
+    case ADD_QUANTITY:
       return {
         ...state,
-        addedItems: new_items,
-        total: newTotal,
+        addedItems: action.payload.order.order,
+        total: action.payload.sum,
       };
-    } else {
-      addedItem.quantity -= 1;
-      let newTotal = state.total - addedItem.price;
+    case SUB_QUANTITY:
       return {
         ...state,
-        total: newTotal,
+        addedItems: action.payload.order.order,
+        total: action.payload.sum,
       };
-    }
-  }
+    case ADD_SHIPPING:
+      return {
+        ...state,
+        addedItems: action.payload.order.order,
+        total: action.payload.sum,
+      };
+    case SUB_SHIPPING:
+      return {
+        ...state,
+        addedItems: action.payload.order.order,
+        total: action.payload.sum,
+      };
+    case SET_LOGSTATUS:
+      return {
+        ...state,
+        loginStaus: action.payload,
+      };
+    case SET_LOGGEDINUSERNAME:
+      return {
+        ...state,
+        Loggedinusername: action.payload,
+      };
 
-  if (action.type === ADD_SHIPPING) {
-    return {
-      ...state,
-      total: state.total + 10,
-    };
-  }
-
-  if (action.type === SET_LOGSTATUS) {
-    return {
-      ...state,
-      loginStaus: action.payload,
-    };
-  }
-
-  if (action.type === SET_LOGSTATUS) {
-    return {
-      ...state,
-      loginStaus: action.payload,
-    };
-  }
-
-  if (action.type === SET_LOGGEDINUSERNAME) {
-    return {
-      ...state,
-      Loggedinusername: action.payload,
-    };
-  }
-
-  if (action.type === SUB_SHIPPING) {
-    return {
-      ...state,
-      total: state.total - 10,
-    };
-  } else {
-    return state;
+    default:
+      return state;
   }
 };
 

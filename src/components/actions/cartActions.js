@@ -10,52 +10,51 @@ import {
 } from "./action-types/cart-actions";
 
 //Add cart action
-export const addToCart = (id) => {
+export const addToCart = (payload) => {
   return {
     type: ADD_TO_CART,
-    id,
+    payload,
   };
 };
 //Remove item action
-export const removeItem = (id) => {
+export const removeItem = (payload) => {
   return {
     type: REMOVE_ITEM,
-    id,
+    payload,
   };
 };
 
 //Add quantity action
-export const addQuantity = (id) => {
+export const addQuantity = (payload) => {
   return {
     type: ADD_QUANTITY,
-    id,
+    payload,
   };
 };
 
 //Subtract quantity action
-export const subtractQuantity = (id) => {
+export const subtractQuantity = (payload) => {
   return {
     type: SUB_QUANTITY,
-    id,
+    payload,
   };
 };
 
 //Add shipment action
-export const addShipping = (id) => {
+export const addShipping = (payload) => {
   return {
     type: ADD_SHIPPING,
-    id,
+    payload,
   };
 };
 
 //Subtract shipment action
-export const substractShipping = (id) => {
+export const substractShipping = (payload) => {
   return {
     type: SUB_SHIPPING,
-    id,
+    payload,
   };
 };
-
 
 export const setStatus = (payload) => {
   return {

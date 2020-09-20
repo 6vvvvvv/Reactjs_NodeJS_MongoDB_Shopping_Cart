@@ -3,13 +3,12 @@ import { connect } from "react-redux";
 import "./Home.css";
 import M from "materialize-css/dist/js/materialize.min.js";
 import { Link } from "react-router-dom";
-
 import {
-  addToCart,
-  removeItem,
-  addQuantity,
-  subtractQuantity,
-} from "./actions/cartActions";
+  add_item_toback,
+  remove_item_fromback,
+  add_quantity,
+  sub_quantity,
+} from "../components/thunk/cart-thunk";
 
 class Home extends Component {
   componentDidMount = () => {
@@ -18,20 +17,47 @@ class Home extends Component {
     M.Sidenav.init(sidenav, { edge: "right" });
   };
 
-  handleClick = (id) => {
-    this.props.addToCart(id);
+  //Add the quantity on the card
+  handleClick = (item) => {
+    const userinfo = JSON.parse(localStorage.getItem("user"));
+    const useremail = userinfo.useremail;
+    const payload = {
+      item,
+      useremail,
+    };
+    this.props.add_item_toback(payload);
   };
 
-  handleRemove = (id) => {
-    this.props.removeItem(id);
-  };
   //Add the quantity
-  handleAddQuantity = (id) => {
-    this.props.addQuantity(id);
+  handleAddQuantity = (item) => {
+    const userinfo = JSON.parse(localStorage.getItem("user"));
+    const useremail = userinfo.useremail;
+    const payload = {
+      item,
+      useremail,
+    };
+
+    this.props.add_quantity(payload);
   };
   //Substruct the quantity
-  handleSubtractQuantity = (id) => {
-    this.props.subtractQuantity(id);
+  handleSubtractQuantity = (item) => {
+    const userinfo = JSON.parse(localStorage.getItem("user"));
+    const useremail = userinfo.useremail;
+    const payload = {
+      item,
+      useremail,
+    };
+    this.props.sub_quantity(payload);
+  };
+  //remove item
+  handleRemove = (item) => {
+    const userinfo = JSON.parse(localStorage.getItem("user"));
+    const useremail = userinfo.useremail;
+    const payload = {
+      item,
+      useremail,
+    };
+    this.props.remove_item_fromback(payload);
   };
 
   render() {
@@ -40,19 +66,19 @@ class Home extends Component {
         <div className="card card-display" key={item.id}>
           <div className="card-image">
             <img src={item.img} alt={item.title} />
-            
+
             <span
               to="/"
               className="btn-floating halfway-fab waves-effect waves-light red"
               onClick={() => {
-                this.handleClick(item.id);
+                this.handleClick(item);
               }}
             >
               <i className="material-icons">add</i>
             </span>
           </div>
           <div className="card-content">
-          <span className=" itemname">{item.title}</span>
+            <span className=" itemname">{item.title}</span>
             <p>{item.desc}</p>
             <p>
               <b>Price: {item.price}$</b>
@@ -72,7 +98,7 @@ class Home extends Component {
             </div>
           </nav>
 
-          {this.props.sidebaritems.length
+          {this.props.sidebaritems
             ? this.props.sidebaritems.map((item) => {
                 return (
                   <li key={item.id}>
@@ -95,7 +121,7 @@ class Home extends Component {
                               <i
                                 className="material-icons"
                                 onClick={() => {
-                                  this.handleAddQuantity(item.id);
+                                  this.handleAddQuantity(item);
                                 }}
                               >
                                 arrow_drop_up
@@ -105,7 +131,7 @@ class Home extends Component {
                               <i
                                 className="material-icons"
                                 onClick={() => {
-                                  this.handleSubtractQuantity(item.id);
+                                  this.handleSubtractQuantity(item);
                                 }}
                               >
                                 arrow_drop_down
@@ -115,7 +141,7 @@ class Home extends Component {
                           <button
                             className="waves-effect waves-light btn pink remove"
                             onClick={() => {
-                              this.handleRemove(item.id);
+                              this.handleRemove(item);
                             }}
                           >
                             Remove
@@ -145,17 +171,17 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (id) => {
-      dispatch(addToCart(id));
+    add_item_toback: (payload) => {
+      dispatch(add_item_toback(payload));
     },
-    removeItem: (id) => {
-      dispatch(removeItem(id));
+    remove_item_fromback: (payload) => {
+      dispatch(remove_item_fromback(payload));
     },
-    addQuantity: (id) => {
-      dispatch(addQuantity(id));
+    add_quantity: (payload) => {
+      dispatch(add_quantity(payload));
     },
-    subtractQuantity: (id) => {
-      dispatch(subtractQuantity(id));
+    sub_quantity: (payload) => {
+      dispatch(sub_quantity(payload));
     },
   };
 };

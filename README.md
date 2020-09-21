@@ -18,5 +18,8 @@
 ## 6.Checked Out Page(Protected and Should Logged In)
 ![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Node_MongoDB_Shopping_Cart/blob/master/imgs/6.jpg)
 
-## 7.Log Out Page
+## 7.View in the database MongoDB for previous action 
 ![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Node_MongoDB_Shopping_Cart/blob/master/imgs/7.jpg)
+
+## 8.Log Out Page
+![image](https://github.com/6vvvvvv/Reactjs_Redux_Router_Node_MongoDB_Shopping_Cart/blob/master/imgs/8.jpg)

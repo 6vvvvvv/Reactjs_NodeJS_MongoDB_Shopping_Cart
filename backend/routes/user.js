@@ -1,5 +1,4 @@
 const express = require("express");
-//FIXME:
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -31,7 +30,6 @@ router.post(
     }
 
     const { username, password } = req.body;
-    //FIXME:
     var { email } = req.body;
     try {
       let user = await User.findOne({
@@ -42,7 +40,6 @@ router.post(
           msg: "User Already Exists",
         });
       }
-      //FIXME:
       email = email.toLowerCase();
 
       user = new User({
@@ -185,7 +182,7 @@ router.post("/additem", async (req, res) => {
       {
         email: req.body.email,
         "order.id": req.body.item.id,
-        "order.quantity": { $gt: 0 },
+        // "order.quantity": { $gt: 0 },
       },
       {
         $inc: {
@@ -215,15 +212,11 @@ router.post("/removeitem", async (req, res) => {
       $pull: {
         order: { id: req.body.item.id },
       },
-    },
-    function (err, data) {
-      if (err) {
-        throw err;
-      } else {
-        res.json({ id: req.body.item.id, order: data });
-      }
     }
   );
+
+  const arr = await User.findOne({ email: req.body.email });
+  res.json({ sum: arr.calsum(), id: req.body.item.id, order: arr });
 });
 
 //add quantity
@@ -234,26 +227,22 @@ router.post("/addquantity", async (req, res) => {
   );
 
   if (findtarget) {
-    User.updateOne(
+    User.findOneAndUpdate(
       {
         email: req.body.email,
-        "order.id": req.body.item.id,
-        "order.quantity": { $gt: 0 },
+        "order.title": findtarget.title,
       },
       {
         $inc: {
           "order.$.quantity": 1,
         },
       },
-      function () {
-        User.findOne({ email: req.body.email }).exec(function (error, use) {
-          if (error) {
-            throw error;
-          } else {
-            console.log("sum", use.calsum());
-            res.json({ sum: use.calsum(), id: req.body.item.id, order: use });
-          }
-        });
+      { new: true },
+      function (err, arr) {
+        if (err) {
+          throw err;
+        }
+        res.json({ sum: arr.calsum(), id: req.body.item.id, order: arr });
       }
     );
   }
@@ -267,87 +256,85 @@ router.post("/subquantity", async (req, res) => {
   );
 
   if (findtarget) {
-    User.updateOne(
+    User.findOneAndUpdate(
       {
         email: req.body.email,
         "order.id": req.body.item.id,
-        "order.quantity": { $gt: 0 },
       },
       {
         $inc: {
           "order.$.quantity": -1,
         },
       },
-      function (err, data) {
+      { new: true },
+      function (err, arr) {
         if (err) {
           throw err;
-        } else {
-          User.findOne(
-            {
-              email: req.body.email,
-              "order.id": req.body.item.id,
-              "order.quantity": { $eq: 0 },
-            },
-            {
-              $pull: {
-                order: { id: req.body.item.id },
-              },
-            }
-          );
-
-          res.json({ id: req.body.item.id, order: data });
         }
+        User.findOneAndUpdate(
+          { email: req.body.email, "order.quantity": 0 },
+          {
+            $pull: {
+              order: { id: req.body.item.id },
+            },
+          },
+          { new: true },
+          function (err, findzero) {
+            if (err) {
+              throw err;
+            }
+            // console.log("111111111111111111111111111111111111111", findzero);
+
+            if (findzero !== null)
+              res.json({
+                sum: findzero.calsum(),
+                id: req.body.item.id,
+                order: findzero,
+              });
+            else {
+              res.json({ sum: arr.calsum(), id: req.body.item.id, order: arr });
+            }
+          }
+        );
       }
     );
   }
 });
 
-router.post("/addshipment", async (req, res) => {
-  User.findOne(
+//FIXME:
+router.post("/addshipment",  (req, res) => {
+   User.findOneAndUpdate(
     {
       email: req.body.email,
     },
-    function (err, doc) {
-      if (err) {
-        throw err;
+    { $set: { shipment: true } },
+    { new: true },
+    function (error, use) {
+      if (error) {
+        throw error;
       } else {
-        doc.shipment = true;
-        doc.save();
+        res.json({ sum: use.calsum() + 10, order: use });
       }
     }
   );
-
-  await User.findOne({ email: req.body.email }).exec(function (error, use) {
-    if (error) {
-      throw error;
-    } else {
-      res.json({ sum: use.calsum() + 10, id: req.body.item.id, order: use });
-    }
-  });
 });
 
-router.post("/subshipment", async (req, res) => {
-  User.findOne(
+//FIXME:
+router.post("/subshipment",  (req, res) => {
+   User.findOneAndUpdate(
     {
       email: req.body.email,
     },
-    function (err, doc) {
-      if (err) {
-        throw err;
+    { $set: { shipment: false } },
+    { new: true },
+    function (error, use) {
+      if (error) {
+        throw error;
       } else {
-        doc.shipment = false;
-        doc.save();
+        res.json({ sum: use.calsum() , order: use });
       }
     }
   );
-
-  await User.findOne({ email: req.body.email }).exec(function (error, use) {
-    if (error) {
-      throw error;
-    } else {
-      res.json({ sum: use.calsum() - 10, id: req.body.item.id, order: use });
-    }
-  });
 });
 
 // router.post("/toggleitem", async (req, res) => {
@@ -355,12 +342,12 @@ router.post("/subshipment", async (req, res) => {
 //     {
 //       email: req.body.email,
 //     },
-//     function (err, doc) {
+//     function (err, use) {
 //       if (err) {
 //         throw err;
 //       } else {
-//         doc.shipment = !doc.shipment;
-//         doc.save();
+//         use.shipment = !use.shipment;
+//         use.save();
 //       }
 //     }
 //   );

@@ -52,6 +52,7 @@ const Cart = (props) => {
   };
   //Add the quantity
   const handleAddQuantity = (item) => {
+    console.log("item-------------", item);
     const userinfo = JSON.parse(localStorage.getItem("user"));
     const useremail = userinfo.useremail;
     const payload = {
@@ -72,7 +73,7 @@ const Cart = (props) => {
   };
 
   let addedItems =
-    props.items && user ? (
+    props.items.length > 0 && user ? (
       props.items.map((item) => {
         return (
           <li className="collection-item avatar" key={item.id}>

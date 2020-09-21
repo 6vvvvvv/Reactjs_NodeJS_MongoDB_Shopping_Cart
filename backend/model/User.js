@@ -24,7 +24,7 @@ const UserSchema = mongoose.Schema({
         title: String,
         desc: String,
         price: Number,
-        quantity: { type: Number, default: 1, min: 0 },
+        quantity: { type: Number, default: 1 },
         img: String,
       },
     ],
@@ -34,10 +34,15 @@ const UserSchema = mongoose.Schema({
 });
 
 UserSchema.methods.calsum = function () {
-  const amountarr = this.order.map((item) => item.price * item.quantity);
-  console.log("amountarr", amountarr);
-  const totalamount = amountarr.reduce((total, cur) => total + cur);
-  return totalamount;
+  if (this.order.length === 0) {
+    return 0;
+  } else {
+    const amountarr = this.order.map((item) => item.price * item.quantity);
+    console.log("amountarr", amountarr);
+    const reducer = (total, cur) => total + cur;
+    const totalamount = amountarr.reduce(reducer, 0);
+    return totalamount;
+  }
 };
 
 // export model user with UserSchema

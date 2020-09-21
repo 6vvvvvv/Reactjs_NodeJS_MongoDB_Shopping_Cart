@@ -1,16 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { add_shipment, sub_shipment } from "../components/thunk/cart-thunk";
 
 class Recipe extends Component {
   componentWillUnmount() {
-    if (this.refs.shipping.checked) this.props.substractShipping();
+    if (this.refs.shipping.checked) this.props.sub_shipment();
   }
 
   handleChecked = (e) => {
+    const userinfo = JSON.parse(localStorage.getItem("user"));
+    const useremail = userinfo.useremail;
+
     if (e.target.checked) {
-      this.props.addShipping();
+      this.props.add_shipment(useremail);
     } else {
-      this.props.substractShipping();
+      this.props.sub_shipment(useremail);
     }
   };
 
@@ -49,11 +53,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addShipping: () => {
-      dispatch({ type: "ADD_SHIPPING" });
+    add_shipment: (payload) => {
+      dispatch(add_shipment(payload));
     },
-    substractShipping: () => {
-      dispatch({ type: "SUB_SHIPPING" });
+    sub_shipment: (payload) => {
+      dispatch(sub_shipment(payload));
     },
   };
 };

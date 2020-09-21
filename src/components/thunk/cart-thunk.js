@@ -119,15 +119,14 @@ export const sub_quantity = (payload) => {
 //ADD_SHIPMENT
 export const add_shipment = (payload) => {
   return (dispatch, getState) => {
-    console.log("payload", payload);
+    console.log("payload****************************", payload);
     // const userinfo = JSON.parse(localStorage.getItem("user"));
     // const token = userinfo.token;
     axios
       .post(
         "http://localhost:4000/user/addshipment",
         {
-          item: payload.item,
-          email: payload.useremail,
+          email: payload,
         },
         {
           headers: {
@@ -138,7 +137,7 @@ export const add_shipment = (payload) => {
       )
       .then((res) => {
         console.log("add_shipment", res.data);
-        dispatch(addShipping());
+        dispatch(addShipping(res.data));
       });
   };
 };
@@ -146,15 +145,14 @@ export const add_shipment = (payload) => {
 //SUB_SHIPMENT
 export const sub_shipment = (payload) => {
   return (dispatch, getState) => {
-    console.log("payload", payload);
+    console.log("payload**************", payload);
     // const userinfo = JSON.parse(localStorage.getItem("user"));
     // const token = userinfo.token;
     axios
       .post(
         "http://localhost:4000/user/subshipment",
         {
-          item: payload.item,
-          email: payload.useremail,
+          email: payload,
         },
         {
           headers: {
